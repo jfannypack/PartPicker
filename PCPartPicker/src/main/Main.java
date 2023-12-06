@@ -3,27 +3,27 @@ import java.util.*;
 
 // Creational Pattern - Factory Method
 abstract class ComponentFactory {
-    public abstract Component createComponent(String brand, String model, double ghzSpeed, double price);
+    public abstract Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize);
 }
 
 class CPUFactory extends ComponentFactory {
     @Override
-    public Component createComponent(String brand, String model, double ghzSpeed, double price) {
-        return new CPU(brand, model, ghzSpeed, price);
+    public Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize) {
+        return new CPU(brand, model, ghzSpeed, price, ramSize);
     }
 }
 
 class GPUFactory extends ComponentFactory {
     @Override
-    public Component createComponent(String brand, String model, double ghzSpeed, double price) {
-        return new GPU(brand, model, price);
+    public Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize) {
+        return new GPU(brand, model, price, ramSize);
     }
 }
 
 class RAMFactory extends ComponentFactory {
     @Override
-    public Component createComponent(String brand, String model, double ghzSpeed, double price) {
-        return new RAM(brand, model, price);
+    public Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize) {
+        return new RAM(brand, model, price, ramSize);
     }
 }
 
@@ -32,20 +32,22 @@ interface Component {
     String getName();
     String getBrand();
     double getPrice();
+    int getRamSize();
 }
-
 
 class CPU implements Component {
     private String brand;
     private String model;
     private double ghzSpeed;
     private double price;
+    private int ramSize;
 
-    public CPU(String brand, String model, double ghzSpeed, double price) {
+    public CPU(String brand, String model, double ghzSpeed, double price, int ramSize) {
         this.brand = brand;
         this.model = model;
         this.ghzSpeed = ghzSpeed;
         this.price = price;
+        this.ramSize = ramSize;
     }
 
     @Override
@@ -58,14 +60,17 @@ class CPU implements Component {
         return brand;
     }
 
-
-
     public double getGhzSpeed() {
         return ghzSpeed;
     }
+
     @Override
     public double getPrice() {
         return price;
+    }
+
+    public int getRamSize() {
+        return ramSize;
     }
 }
 
@@ -73,11 +78,13 @@ class GPU implements Component {
     private String brand;
     private String model;
     private double price;
+    private int ramSize;
 
-    public GPU(String brand, String model, double price) {
+    public GPU(String brand, String model, double price, int ramSize) {
         this.brand = brand;
         this.model = model;
         this.price = price;
+        this.ramSize = ramSize;
     }
 
     @Override
@@ -89,22 +96,28 @@ class GPU implements Component {
     public String getBrand() {
         return brand;
     }
+
     @Override
     public double getPrice() {
         return price;
     }
 
+    public int getRamSize() {
+        return ramSize;
+    }
 }
 
 class RAM implements Component {
     private String brand;
     private String model;
     private double price;
+    private int ramSize;
 
-    public RAM(String brand, String model, double price) {
+    public RAM(String brand, String model, double price, int ramSize) {
         this.brand = brand;
         this.model = model;
         this.price = price;
+        this.ramSize = ramSize;
     }
 
     @Override
@@ -116,12 +129,15 @@ class RAM implements Component {
     public String getBrand() {
         return brand;
     }
+
     @Override
     public double getPrice() {
         return price;
     }
 
-
+    public int getRamSize() {
+        return ramSize;
+    }
 }
 
 // Behavioral Pattern - Strategy
@@ -176,10 +192,10 @@ class PCConfiguration {
     public boolean checkCompatibility(CompatibilityChecker checker) {
         return checker.isCompatible(components);
     }
+
     public double calculateTotalPrice() {
         double totalPrice = 0;
         for (Component component : components) {
-            System.out.println(component.getPrice());
             totalPrice += component.getPrice();
         }
         return totalPrice;
@@ -209,6 +225,7 @@ public class Main {
 
         return userInput;
     }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
@@ -224,18 +241,18 @@ public class Main {
         List<Component> ramOptions = new ArrayList<>();
 
         // Create CPU options with random GHz speeds
-        cpuOptions.add(cpuFactory.createComponent("Intel", "i7", 3.6 + random.nextDouble(), 279.99));
-        cpuOptions.add(cpuFactory.createComponent("AMD", "Ryzen 9", 3.0 + random.nextDouble(), 467));
-        cpuOptions.add(cpuFactory.createComponent("Intel", "i9", 3.5 + random.nextDouble(), 800));
+        cpuOptions.add(cpuFactory.createComponent("Intel", "i7 12700K", 3.6, 279.99, 0));
+        cpuOptions.add(cpuFactory.createComponent("AMD", "Ryzen 5 3600  ", 3.6, 119.99, 0));
+        cpuOptions.add(cpuFactory.createComponent("Intel", "i3 13100", 3.4, 147.99, 0));
 
         // Create GPU options
-        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "GeForce RTX 3080", 0, 400));
-        gpuOptions.add(gpuFactory.createComponent("AMD", "Radeon RX 6900 XT", 0, 500));
-        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "GeForce RTX 3060 Ti", 0, 600));
+        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "GeForce RTX 3080", 0, 699.00, 0));
+        gpuOptions.add(gpuFactory.createComponent("AMD", "Radeon RX 6900 XT", 0, 999.00, 0));
+        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "GeForce RTX 3060", 0, 299.00, 0));
 
         // Create RAM options
-        ramOptions.add(ramFactory.createComponent("Corsair", "Vengeance", 0, 345));
-        ramOptions.add(ramFactory.createComponent("G.SKILL", "DDR5", 0, 80));
+        ramOptions.add(ramFactory.createComponent("Corsair", "Vengeance", 0, 345, 16));
+        ramOptions.add(ramFactory.createComponent("G.SKILL", "DDR5", 0, 80, 16));
 
         // Ask the user to select one CPU
         System.out.println("Select one CPU:");
@@ -258,17 +275,24 @@ public class Main {
         // Ask the user to select one RAM
         System.out.println("Select one RAM:");
         for (int i = 0; i < ramOptions.size(); i++) {
-            System.out.println(i + 1 + ". " + ramOptions.get(i).getName());
+            System.out.println(i + 1 + ". " + ramOptions.get(i).getName() + " " + ramOptions.get(i).getRamSize() + "GB");
         }
 
         int selectedRamIndex = getValidInput(1, ramOptions.size(), "Enter the number corresponding to your choice:", scanner) - 1;
         Component selectedRam = ramOptions.get(selectedRamIndex);
 
+        // Ask the user how many sets of RAM they want
+        int numRamSets = getValidInput(1, Integer.MAX_VALUE, "Enter the number of RAM sets you want:", scanner);
+
         // Create a PC configuration
         PCConfiguration configuration = new PCConfiguration();
         configuration.addComponent(selectedCpu);
         configuration.addComponent(selectedGpu);
-        configuration.addComponent(selectedRam);
+
+        // Add the specified number of RAM sets
+        for (int i = 0; i < numRamSets; i++) {
+            configuration.addComponent(selectedRam);
+        }
 
         // Use the Strategy pattern to check compatibility for gaming
         CompatibilityChecker gamingChecker = new GamingCompatibilityChecker();
