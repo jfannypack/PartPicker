@@ -3,39 +3,39 @@ import java.util.*;
 
 // Creational Pattern - Factory Method
 abstract class ComponentFactory {
-    public abstract Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize);
+    public abstract Component createComponent(String brand, String model, String category, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize);
 }
 
 class CPUFactory extends ComponentFactory {
     @Override
-    public Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
-        return new CPU(brand, model, ghzSpeed, price, socket);
+    public Component createComponent(String brand, String model, String category, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
+        return new CPU(brand, model, category, ghzSpeed, price, socket);
     }
 }
 
 class GPUFactory extends ComponentFactory {
     @Override
-    public Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
-        return new GPU(brand, model, price, ramSize);
+    public Component createComponent(String brand, String model, String category, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
+        return new GPU(brand, model, category, price, ramSize);
     }
 }
 
 class RAMFactory extends ComponentFactory {
     @Override
-    public Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
-        return new RAM(brand, model, price, ramSize);
+    public Component createComponent(String brand, String model, String category, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
+        return new RAM(brand, model, category, price, ramSize);
     }
 }
 class MOBOFactory extends ComponentFactory {
     @Override
-    public Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
-        return new MOBO(brand, model, price, socket);
+    public Component createComponent(String brand, String model, String category, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
+        return new MOBO(brand, model, category,  price, socket);
     }
 }
 class STORAGEFactory extends ComponentFactory {
     @Override
-    public Component createComponent(String brand, String model, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
-        return new STORAGE(brand, model, price, storageType, storageSize);
+    public Component createComponent(String brand, String model, String category, double ghzSpeed, double price, int ramSize, String socket, String storageType, String storageSize) {
+        return new STORAGE(brand, model, category,price,  storageType, storageSize);
     }
 }
 
@@ -47,6 +47,7 @@ interface Component {
     int getRamSize();
     String getSocket();
     String getStorageSize();
+    String getCategory();
 }
 
 class CPU implements Component {
@@ -56,10 +57,12 @@ class CPU implements Component {
     private double price;
     private String socket;
     private String storageSize;
+    private String category;
 
-    public CPU(String brand, String model, double ghzSpeed, double price, String socket) {
+    public CPU(String brand, String model, String category, double ghzSpeed, double price, String socket) {
         this.brand = brand;
         this.model = model;
+        this.category = category;
         this.ghzSpeed = ghzSpeed;
         this.price = price;
         this.socket = socket;
@@ -93,6 +96,9 @@ class CPU implements Component {
     public String getStorageSize(){
         return storageSize;
     }
+    public String getCategory(){
+        return category;
+    }
 }
 
 class GPU implements Component {
@@ -102,10 +108,12 @@ class GPU implements Component {
     private int ramSize;
     private String socket;
     private String storageSize;
+    private String category;
 
-    public GPU(String brand, String model, double price, int ramSize) {
+    public GPU(String brand, String model, String category, double price, int ramSize) {
         this.brand = brand;
         this.model = model;
+        this.category = category;
         this.price = price;
         this.ramSize = ramSize;
     }
@@ -134,6 +142,9 @@ class GPU implements Component {
     public String getStorageSize(){
         return storageSize;
     }
+    public String getCategory(){
+        return category;
+    }
 }
 
 class RAM implements Component {
@@ -143,17 +154,19 @@ class RAM implements Component {
     private int ramSize;
     public String socket;
     public String storageSize;
+    public String category;
 
-    public RAM(String brand, String model, double price, int ramSize) {
+    public RAM(String brand, String model, String category, double price, int ramSize) {
         this.brand = brand;
         this.model = model;
+        this.category = category;
         this.price = price;
         this.ramSize = ramSize;
     }
 
     @Override
     public String getName() {
-        return "RAM: " + brand + " " + model + " "+ ramSize + "GB";
+        return "RAM: " + brand + " " + model;
     }
 
     @Override
@@ -175,6 +188,9 @@ class RAM implements Component {
     public String getStorageSize(){
         return storageSize;
     }
+    public String getCategory(){
+        return category;
+    }
 }
 class STORAGE implements Component {
     private String brand;
@@ -182,10 +198,12 @@ class STORAGE implements Component {
     private double price;
     public String storageType;
     public String storageSize;
+    public String category;
 
-    public STORAGE(String brand, String model, double price, String storageType, String storageSize) {
+    public STORAGE(String brand, String model, String category, double price, String storageType, String storageSize) {
         this.brand = brand;
         this.model = model;
+        this.category = category;
         this.price = price;
         this.storageType = storageType;
         this.storageSize = storageSize;
@@ -215,6 +233,9 @@ class STORAGE implements Component {
     public String getStorageSize(){
         return storageSize;
     }
+    public String getCategory(){
+        return category;
+    }
 }
 class MOBO implements Component {
     private String brand;
@@ -222,10 +243,12 @@ class MOBO implements Component {
     private double price;
     public String socket;
     public String storageSize;
+    public String category;
 
-    public MOBO(String brand, String model, double price, String socket) {
+    public MOBO(String brand, String model, String category, double price, String socket) {
         this.brand = brand;
         this.model = model;
+        this.category = category;
         this.price = price;
         this.socket = socket;
     }
@@ -253,6 +276,9 @@ class MOBO implements Component {
     }
     public String getStorageSize(){
         return storageSize;
+    }
+    public String getCategory(){
+        return category;
     }
 }
 
@@ -362,25 +388,26 @@ public class Main {
 
 
         // Create CPU options with random GHz speeds
-        cpuOptions.add(cpuFactory.createComponent("Intel", "i7 12700K", 3.6, 279.99, 0, "LGA", "", "0"));
-        cpuOptions.add(cpuFactory.createComponent("AMD", "Ryzen 5 3600  ", 3.6, 119.99, 0, "AM5", "", "0"));
-        cpuOptions.add(cpuFactory.createComponent("Intel", "i3 13100", 3.4, 147.99, 0, "LGA", "", "0"));
+        cpuOptions.add(cpuFactory.createComponent("Intel", "i7 12700K", "Gaming",3.6, 279.99, 0, "LGA", "", "0"));
+        cpuOptions.add(cpuFactory.createComponent("AMD", "Ryzen 5 3600  ", "Gaming",3.6, 119.99, 0, "AM5", "", "0"));
+        cpuOptions.add(cpuFactory.createComponent("Intel", "i3 13100", "Productivity",3.4, 147.99, 0, "LGA", "", "0"));
 
         // Create GPU options
-        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "GeForce RTX 3080", 0, 699.00, 0, "", "", "0"));
-        gpuOptions.add(gpuFactory.createComponent("AMD", "Radeon RX 6900 XT", 0, 999.00, 0, "", "", "0"));
-        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "GeForce RTX 3060", 0, 299.00, 0, "", "", "0"));
+        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "GeForce RTX 3080", "Gaming",0, 699.00, 0, "", "", "0"));
+        gpuOptions.add(gpuFactory.createComponent("AMD", "Radeon RX 6900 XT", "Gaming",0, 999.00, 0, "", "", "0"));
+        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "GeForce RTX 3060", "Gaming",0, 299.00, 0, "", "", "0"));
+        gpuOptions.add(gpuFactory.createComponent("NVIDIA", "RTX Titan", "Productivity",0, 1599.99, 0, "", "", "0"));
 
         // Create RAM options
-        ramOptions.add(ramFactory.createComponent("Corsair", "Vengeance", 0, 345, 16, "", "", "0"));
-        ramOptions.add(ramFactory.createComponent("G.SKILL", "DDR5", 0, 80, 16, "", "", "0"));
+        ramOptions.add(ramFactory.createComponent("Corsair", "Vengeance", "Gaming",0, 345, 16, "", "", "0"));
+        ramOptions.add(ramFactory.createComponent("G.SKILL", "DDR5", "Gaming", 0, 80, 16, "", "", "0"));
 
 
-        moboOptions.add(moboFactory.createComponent("ASUS", "B550", 0, 99.99, 0, "AM5", "", "0"));
-        moboOptions.add(moboFactory.createComponent("ASRock", "Z90", 0, 109.99, 0, "LGA", "", "0"));
+        moboOptions.add(moboFactory.createComponent("ASUS", "B550", "Gaming",0, 99.99, 0, "AM5", "", "0"));
+        moboOptions.add(moboFactory.createComponent("ASRock", "Z90", "Gaming",0, 109.99, 0, "LGA", "", "0"));
 
-        storageOptions.add(storageFactory.createComponent("Samsung", "870 EVO", 0, 74.99, 0, "", "SSD", "1TB"));
-        storageOptions.add(storageFactory.createComponent("AORUS", "GEN4 5000E", 0, 89.99, 0, "", "SSD", "2TB"));
+        storageOptions.add(storageFactory.createComponent("Samsung", "870 EVO", "Productivity",0, 74.99, 0, "", "SSD", "1TB"));
+        storageOptions.add(storageFactory.createComponent("AORUS", "GEN4 5000E", "Gaming",0, 89.99, 0, "", "SSD", "2TB"));
 
 
         // Ask the user to select one CPU
