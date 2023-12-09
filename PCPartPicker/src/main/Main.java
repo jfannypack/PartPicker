@@ -388,9 +388,11 @@ public class Main {
 
 
         // Create CPU options with random GHz speeds
-        cpuOptions.add(cpuFactory.createComponent("Intel", "i7 12700K", "Gaming",3.6, 279.99, 0, "LGA", "", "0"));
+        cpuOptions.add(cpuFactory.createComponent("Intel", "i7 12700K", "Gaming",3.6, 279.99, 0, "LGA 1700", "", "0"));
+        cpuOptions.add(cpuFactory.createComponent("Intel", "i3 13100", "Productivity",3.4, 147.99, 0, "LGA 1700", "", "0"));
+        cpuOptions.add(cpuFactory.createComponent("Intel", "Celeron G5925", "Productivity",3.6, 60.00, 0, "LGA 1200", "", "0"));
         cpuOptions.add(cpuFactory.createComponent("AMD", "Ryzen 5 3600  ", "Gaming",3.6, 119.99, 0, "AM5", "", "0"));
-        cpuOptions.add(cpuFactory.createComponent("Intel", "i3 13100", "Productivity",3.4, 147.99, 0, "LGA", "", "0"));
+        cpuOptions.add(cpuFactory.createComponent("AMD", "Ryzen 5 7600X  ", "Gaming",4.7, 218.99, 0, "AM5", "", "0"));
         cpuOptions.add(cpuFactory.createComponent("AMD", "Ryzen Threadripper PRO 5955WX", "Productivity",4.0, 1034.99, 0, "sWRX8", "", "0"));
 
         // Create GPU options
@@ -405,8 +407,11 @@ public class Main {
 
 
         moboOptions.add(moboFactory.createComponent("ASUS", "B550", "Gaming",0, 99.99, 0, "AM5", "", "0"));
-        moboOptions.add(moboFactory.createComponent("ASRock", "Z90", "Gaming",0, 109.99, 0, "LGA", "", "0"));
         moboOptions.add(moboFactory.createComponent("ASUS", "Pro WS WRX80E-SAGE", "Productivity",0, 999.00, 0, "sWRX8", "", "0"));
+        moboOptions.add(moboFactory.createComponent("ASRock", "Z90", "Gaming",0, 109.99, 0, "LGA 1700", "", "0"));
+        moboOptions.add(moboFactory.createComponent("ASRock", "B660M PRO RS", "Gaming",0, 89.99, 0, "LGA 1700", "", "0"));
+        moboOptions.add(moboFactory.createComponent("GIGABYTE", "Z790 GAMING X AX", "Gaming",0, 229.99, 0, "LGA 1700", "", "0"));
+
 
         storageOptions.add(storageFactory.createComponent("Samsung", "870 EVO", "Productivity",0, 74.99, 0, "", "SSD", "1TB"));
         storageOptions.add(storageFactory.createComponent("AORUS", "GEN4 5000E", "Gaming",0, 89.99, 0, "", "SSD", "2TB"));
