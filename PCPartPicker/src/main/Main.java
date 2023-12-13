@@ -285,7 +285,9 @@ class MOBO implements Component {
 // Behavioral Pattern - Strategy
 interface CompatibilityChecker {
     boolean isCompatible(List<Component> components);
+    boolean isWithinBudget(double budget, double totalPrice);
 }
+
 class GamingCompatibilityChecker implements CompatibilityChecker {
     @Override
     public boolean isCompatible(List<Component> components) {
@@ -308,6 +310,10 @@ class GamingCompatibilityChecker implements CompatibilityChecker {
         }
 
         return (hasIntelCPU && hasNvidiaGPU) || (hasAMDCPU && hasAMGGPU);
+    }
+    @Override
+    public boolean isWithinBudget(double budget, double totalPrice) {
+        return totalPrice <= budget;
     }
 }
 
@@ -388,6 +394,29 @@ public class Main {
         int choice = getValidInput(1, 2, "Enter your choice (1 for Gaming, 2 for Productivity):", scanner);
         return choice == 1 ? "Gaming" : "Productivity";
     }
+    public static double getBudgetInput(Scanner scanner) {
+        double budget = 0.0;
+        boolean isValidInput = false;
+
+        while (!isValidInput) {
+            try {
+                System.out.println("Enter your budget:");
+                budget = scanner.nextDouble();
+
+                if (budget <= 0) {
+                    System.out.println("Invalid input. Please enter a positive budget.");
+                } else {
+                    isValidInput = true;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Consume the invalid input
+            }
+        }
+
+        return budget;
+    }
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -456,6 +485,8 @@ public class Main {
             }
         }
 
+        double budget = getBudgetInput(scanner);
+
         // Ask the user to select one CPU
         System.out.println("Select one CPU:");
         for (int i = 0; i < filteredCpuOptions.size(); i++) {
@@ -519,14 +550,18 @@ public class Main {
         }
 
         // Use the Strategy pattern to check compatibility for gaming
+        double totalPrice = configuration.calculateTotalPrice();
         CompatibilityChecker gamingChecker = new GamingCompatibilityChecker();
         boolean isGamingCompatible = configuration.checkCompatibility(gamingChecker);
+        boolean isBudgetCompatible = gamingChecker.isWithinBudget(budget, totalPrice);
+
 
         System.out.println("Gaming Compatibility: " + isGamingCompatible);
+        System.out.println("Budget Compatibility: " + isBudgetCompatible);
+        System.out.println();
 
         // Display selected components
         configuration.displayComponents();
-        double totalPrice = configuration.calculateTotalPrice();
         System.out.println("Total Price: $" + totalPrice);
         printComputerASCIIArt(configuration);
     }
