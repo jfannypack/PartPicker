@@ -341,6 +341,7 @@ class PCConfiguration {
         }
         return totalPrice;
     }
+
 }
 
 public class Main {
@@ -366,10 +367,33 @@ public class Main {
 
         return userInput;
     }
+    public static void printComputerASCIIArt(PCConfiguration configuration) {
+        // ASCII art generation logic here
+        System.out.println(" ______________________________");
+        System.out.println("|     Gaming PC Configuration     |");
+        System.out.println("|--------------------------------|");
+        configuration.displayComponents();
+        System.out.println("|");
+        System.out.println("|");
+        System.out.println("|");
+        System.out.println("|--------------------------------|");
+        System.out.println("|       Total Price: $" + configuration.calculateTotalPrice());
+        System.out.println("|________________________________|");
+    }
+    public static String getBuildType(Scanner scanner) {
+        System.out.println("Select the type of build:");
+        System.out.println("1. Gaming");
+        System.out.println("2. Productivity");
+
+        int choice = getValidInput(1, 2, "Enter your choice (1 for Gaming, 2 for Productivity):", scanner);
+        return choice == 1 ? "Gaming" : "Productivity";
+    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
+
+        String buildType = getBuildType(scanner);
 
         // Create component factories
         ComponentFactory cpuFactory = new CPUFactory();
@@ -385,6 +409,8 @@ public class Main {
         List<Component> moboOptions = new ArrayList<>();
         List<Component> compatibleMoboOptions = new ArrayList<>();
         List<Component> storageOptions = new ArrayList<>();
+        List<Component> filteredCpuOptions = new ArrayList<>();
+        List<Component> filteredGpuOptions = new ArrayList<>();
 
 
         // Create CPU options with random GHz speeds
@@ -415,21 +441,33 @@ public class Main {
 
         storageOptions.add(storageFactory.createComponent("Samsung", "870 EVO", "Productivity",0, 74.99, 0, "", "SSD", "1TB"));
         storageOptions.add(storageFactory.createComponent("AORUS", "GEN4 5000E", "Gaming",0, 89.99, 0, "", "SSD", "2TB"));
+        storageOptions.add(storageFactory.createComponent("Kingston", "A400", "Gaming",0, 24.49, 0, "", "SSD", "256GB"));
 
+
+        for (Component cpu : cpuOptions) {
+            if (cpu.getCategory().equalsIgnoreCase(buildType)) {
+                filteredCpuOptions.add(cpu);
+            }
+        }
+
+        for (Component gpu : gpuOptions) {
+            if (gpu.getCategory().equalsIgnoreCase(buildType)) {
+                filteredGpuOptions.add(gpu);
+            }
+        }
 
         // Ask the user to select one CPU
         System.out.println("Select one CPU:");
-        for (int i = 0; i < cpuOptions.size(); i++) {
-            System.out.println(i + 1 + ". " + cpuOptions.get(i).getName());
+        for (int i = 0; i < filteredCpuOptions.size(); i++) {
+            System.out.println(i + 1 + ". " + filteredCpuOptions.get(i).getName());
         }
 
-        int selectedCpuIndex = getValidInput(1, cpuOptions.size(), "Enter the number corresponding to your choice:", scanner) - 1;
-        Component selectedCpu = cpuOptions.get(selectedCpuIndex);
+        int selectedCpuIndex = getValidInput(1, filteredCpuOptions.size(), "Enter the number corresponding to your choice:", scanner) - 1;
+        Component selectedCpu = filteredCpuOptions.get(selectedCpuIndex);
 
-        for (int i = 0; i < moboOptions.size(); i++) {
-            if (selectedCpu.getSocket().equals(moboOptions.get(i).getSocket())) {
-                compatibleMoboOptions.add(moboOptions.get(i));
-
+        for (Component mobo : moboOptions) {
+            if (selectedCpu.getSocket().equals(mobo.getSocket())) {
+                compatibleMoboOptions.add(mobo);
             }
         }
         System.out.println("Select one MOBO:");
@@ -440,16 +478,14 @@ public class Main {
         Component selectedMobo = compatibleMoboOptions.get(selectedMoboIndex);
 
 
-
-
         // Ask the user to select one GPU
         System.out.println("Select one GPU:");
-        for (int i = 0; i < gpuOptions.size(); i++) {
-            System.out.println(i + 1 + ". " + gpuOptions.get(i).getName());
+        for (int i = 0; i < filteredGpuOptions.size(); i++) {
+            System.out.println(i + 1 + ". " + filteredGpuOptions.get(i).getName());
         }
 
-        int selectedGpuIndex = getValidInput(1, gpuOptions.size(), "Enter the number corresponding to your choice:", scanner) - 1;
-        Component selectedGpu = gpuOptions.get(selectedGpuIndex);
+        int selectedGpuIndex = getValidInput(1, filteredGpuOptions.size(), "Enter the number corresponding to your choice:", scanner) - 1;
+        Component selectedGpu = filteredGpuOptions.get(selectedGpuIndex);
 
         System.out.println("Select one Storage:");
         for (int i = 0; i < storageOptions.size(); i++) {
@@ -492,5 +528,6 @@ public class Main {
         configuration.displayComponents();
         double totalPrice = configuration.calculateTotalPrice();
         System.out.println("Total Price: $" + totalPrice);
+        printComputerASCIIArt(configuration);
     }
 }
